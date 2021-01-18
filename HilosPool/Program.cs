@@ -8,45 +8,38 @@ namespace HilosPool
     {
         const string path = @"C:\Users\Administrador\source\repos\Thread\";
         private static bool ejecutar = true;
+        private static int conteo = 0;
         static void Main(string[] args)
         {
 
 
-            var m = 0;
-            var x = 0;
+            static void Main(string[] args)
+        {
+            ThreadPool.QueueUserWorkItem(Incremento, 1000);
 
-            for (x = 0; x < 8; x++)
-            {
-                Thread miHilo = new Thread(Mensaje_M);
-                miHilo.Start(x);
-            }
+            Thread.Sleep(1000);
+
+            Console.WriteLine("El conteo final es {0}", conteo);
+
+        }
+
+        
+        static void Incremento(object dato)
+        {
+            var limite = (int)dato;
 
             while (ejecutar)
             {
-                Console.WriteLine("Saludos desde el hilo principal{0}", m);
-                m++;
-                if (m == 250000)
+                conteo = conteo + 1;
+                Console.Write(Thread.CurrentThread.ManagedThreadId);
+                Console.WriteLine(" -> {0} ", conteo);
+
+                if(conteo > limite)
+                {
                     ejecutar = false;
-            }
-        }
-        static void Mensaje()
-        {
-            var n = 0;
-            while (ejecutar)
-            {
-                Console.WriteLine("Saludos dese el hilo {0}", n);
-                n++;
+                }
             }
 
-        }
-        static void Mensaje_M(object o)
-        {
-            var n = 0;
-            while (ejecutar)
-            {
-                Console.WriteLine("Saludos desde el hilo {0} - {1}", o, n);
-                n++;
-            }
         }
     }
 }
